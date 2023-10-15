@@ -29,4 +29,15 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	float Speed =100;
+
+	UPROPERTY(VisibleAnywhere)
+	int32 PathPointIndex;
+
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& HitResult);
+
+private:
+	void UpdatePathPointIndex();
+	void MoveTowards(FVector Destination);
+	virtual void Die() override;
 };

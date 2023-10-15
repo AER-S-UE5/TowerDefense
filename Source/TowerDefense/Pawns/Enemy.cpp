@@ -41,13 +41,7 @@ float AEnemy::GetPrecision() const
 	return LocationPrecision;
 }
 
-int32 AEnemy::GetPathPointIndex() const
-{
-	return PathPointIndex;
-}
 
-void AEnemy::SetPathPointPointIndex(int32 Value)
-{
-	PathPointIndex = Value;
-}
+
+
 

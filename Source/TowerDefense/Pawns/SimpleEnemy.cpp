@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Building/TargetTower.h"
 
+
 ASimpleEnemy::ASimpleEnemy()
 {
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
@@ -18,22 +19,12 @@ void ASimpleEnemy::FollowPath()
 {
 	if (GetPath())
 	{
-		FVector Destination = (GetPathPointIndex() != -1) ? GetPath()->GetPathPoints()[GetPathPointIndex()]->GetActorLocation():GetPath()->GetTargetTower()->GetActorLocation();
+		FVector Destination = (PathPointIndex != -1) ? GetPath()->GetPathPoints()[PathPointIndex]->GetActorLocation() : GetPath()->GetTargetTower()->GetActorLocation();
 		Destination.Z = GetActorLocation().Z;
-		FVector MovementDirection = Destination - GetActorLocation();
-		MovementDirection = MovementDirection.GetSafeNormal();
-		AddActorWorldOffset(MovementDirection * Speed * UGameplayStatics::GetWorldDeltaSeconds(this), false);
+		MoveTowards(Destination);		
 		if (FVector::Distance(GetActorLocation(), Destination) < GetPrecision())
 		{
-			if (GetPathPointIndex() < GetPath()->GetPathPoints().Num()-1 && GetPathPointIndex()!=-1)
-			{
-				SetPathPointPointIndex(GetPathPointIndex()+1);
-			}
-			else
-			{
-				SetPathPointPointIndex(-1);
-			}
-
+			UpdatePathPointIndex();
 		}
 	}
 }
@@ -46,6 +37,38 @@ void ASimpleEnemy::Tick(float DeltaTime)
 void ASimpleEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	SetPathPointPointIndex(0);
+	PathPointIndex = 0;
+	Mesh->OnComponentHit.AddDynamic(this, &ASimpleEnemy::OnHit);
 }
 
+void ASimpleEnemy::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& HitResult)
+{
+	if (Cast<ATargetTower>(OtherActor))
+	{
+		Die();
+	}
+}
+
+void ASimpleEnemy::UpdatePathPointIndex()
+{
+	if (PathPointIndex < GetPath()->GetPathPoints().Num()-1 && PathPointIndex!=-1)
+	{
+		PathPointIndex++;
+	}
+	else
+	{
+		PathPointIndex = -1;
+	}
+}
+
+void ASimpleEnemy::MoveTowards(FVector Destination)
+{
+	FVector MovementDirection = Destination - GetActorLocation();
+	MovementDirection = MovementDirection.GetSafeNormal();
+	AddActorWorldOffset(MovementDirection * Speed * UGameplayStatics::GetWorldDeltaSeconds(this), true);
+}
+
+void ASimpleEnemy::Die()
+{
+	Destroy();
+}

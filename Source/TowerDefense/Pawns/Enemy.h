@@ -16,9 +16,13 @@ class TOWERDEFENSE_API AEnemy : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AEnemy();
+	virtual void Tick(float DeltaTime) override;
+	virtual void FollowPath() PURE_VIRTUAL(AEnemy::FollowPath, );
+	void SetPath(APath* NewPath);
 
 private:
 	void GetNextDestination();
+	virtual void Die() PURE_VIRTUAL(AEnemy::Die, );
 
 private:
 	UPROPERTY(VisibleAnywhere);
@@ -27,22 +31,16 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float LocationPrecision = 0.1f;
 
-	UPROPERTY(VisibleAnywhere)
-	int32 PathPointIndex;
+	
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void SetPathPointPointIndex(int32 Value);
-	int32 GetPathPointIndex() const;
 	float GetPrecision() const;
 	APath* GetPath() const;
 
 public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 	
 	
-	virtual void FollowPath() PURE_VIRTUAL(AEnemy::FollowPath, );
-	void SetPath(APath* NewPath);
 };
