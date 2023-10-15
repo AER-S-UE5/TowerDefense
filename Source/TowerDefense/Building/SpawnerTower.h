@@ -6,6 +6,7 @@
 #include "Tower.h"
 #include "SpawnerTower.generated.h"
 
+
 /**
  * 
  */
@@ -17,7 +18,20 @@ class TOWERDEFENSE_API ASpawnerTower : public ATower
 public:
 	ASpawnerTower();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* SpawningPoint;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AEnemy> EnemyClass;
+
+	UPROPERTY(EditInstanceOnly)
+	class APath* ArmyPath;
+
+private:
+	void SpawnEnemy(APath* PassedPath);
+
 };
