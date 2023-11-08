@@ -27,6 +27,10 @@ protected:
 
 	USceneComponent* GetFiringPoint()const;
 
+	float GetDamage() const;
+
+	AEnemy* GetTarget()const;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* Radar;
@@ -43,6 +47,9 @@ private:
 	UPROPERTY(EditDefaultsOnly,Category = "Combat")
 	float FireRate = 1;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	float Damage = 30;
+
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlapComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -58,4 +65,6 @@ private:
 	void LookAtEnemy(AEnemy* Enemy);
 
 	void Attack();
+
+	AEnemy* Target;
 };

@@ -21,10 +21,10 @@ public:
 	virtual void FollowPath() PURE_VIRTUAL(AEnemy::FollowPath, );
 	void SetPath(APath* NewPath);
 	UHealthComponent* GetHealthComponent() const;
+	virtual void Die() PURE_VIRTUAL(AEnemy::Die, );
 
 private:
 	void GetNextDestination();
-	virtual void Die() PURE_VIRTUAL(AEnemy::Die, );
 
 private:
 	UPROPERTY(VisibleAnywhere);

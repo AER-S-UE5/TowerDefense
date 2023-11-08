@@ -2,6 +2,8 @@
 
 
 #include "HealthComponent.h"
+#include "Pawns/Enemy.h"
+#include "Building/SpawnableBuilding.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -35,8 +37,27 @@ void UHealthComponent::BeginPlay()
 	// ...
 	Health = MaxHealth;
 	bIsAlive = true;
+	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
 }
 
+void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* CausingDamageActor)
+{
+	if (DamagedActor == GetOwner())
+	{
+		DecreaseHealth(Damage);
+	}
+	if (!bIsAlive)
+	{
+		if (AEnemy* Enemy = Cast<AEnemy>(GetOwner()))
+		{
+			Enemy->Die();
+		}
+		else if (ASpawnableBuilding* Building = Cast<ASpawnableBuilding>(GetOwner()))
+		{
+			Building->DestroyBuilding();
+		}
+	}
+}
 
 
 

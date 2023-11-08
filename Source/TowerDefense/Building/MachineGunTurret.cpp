@@ -14,8 +14,9 @@ void AMachineGunTurret::DestroyBuilding()
 
 void AMachineGunTurret::Fire()
 {
-	if (FiringParticleSystem)
+	if (FiringParticleSystem && GetTarget())
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FiringParticleSystem, GetFiringPoint()->GetComponentLocation(), GetFiringPoint()->GetComponentRotation());
+		UGameplayStatics::ApplyDamage(GetTarget(), GetDamage(), GetInstigatorController(), this, UDamageType::StaticClass());
 	}
 }

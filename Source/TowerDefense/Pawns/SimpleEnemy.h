@@ -18,6 +18,7 @@ public:
 
 	virtual void FollowPath() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void Die() override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -39,5 +40,4 @@ private:
 private:
 	void UpdatePathPointIndex();
 	void MoveTowards(FVector Destination);
-	virtual void Die() override;
 };

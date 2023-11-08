@@ -28,6 +28,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category= "Health")
 	float MaxHealth = 100;
 
+	UFUNCTION()
+	void TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* CausingDamageActor);
+
 	float Health;
 
 	bool bIsAlive;

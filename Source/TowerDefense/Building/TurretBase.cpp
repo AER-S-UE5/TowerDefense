@@ -27,7 +27,12 @@ void ATurretBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (IsEnemyInRange())
 	{
-		LookAtEnemy(InRangeEnemies[0]);
+		Target = InRangeEnemies[0];
+		LookAtEnemy(Target);
+	}
+	else
+	{
+		Target = nullptr;
 	}
 }
 
@@ -51,6 +56,16 @@ TArray<AEnemy*> ATurretBase::GetInRangeEnemies() const
 USceneComponent* ATurretBase::GetFiringPoint() const
 {
 	return FiringPoint;
+}
+
+float ATurretBase::GetDamage() const
+{
+	return Damage;
+}
+
+AEnemy* ATurretBase::GetTarget() const
+{
+	return Target;
 }
 
 void ATurretBase::OnOverlapBegin(UPrimitiveComponent* OverlapComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
