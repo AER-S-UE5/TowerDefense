@@ -7,6 +7,7 @@
 #include "Enemy.generated.h"
 
 class APath;
+class UHealthComponent;
 
 UCLASS(Abstract, NotBlueprintable)
 class TOWERDEFENSE_API AEnemy : public APawn
@@ -19,6 +20,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void FollowPath() PURE_VIRTUAL(AEnemy::FollowPath, );
 	void SetPath(APath* NewPath);
+	UHealthComponent* GetHealthComponent() const;
 
 private:
 	void GetNextDestination();
@@ -31,7 +33,8 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float LocationPrecision = 0.1f;
 
-	
+	UPROPERTY(VisibleAnywhere)
+	UHealthComponent* HealthComponent;
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,7 +43,7 @@ protected:
 	APath* GetPath() const;
 
 public:	
-	// Called every frame
+	
 	
 	
 };

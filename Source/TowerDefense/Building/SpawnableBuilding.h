@@ -6,6 +6,8 @@
 #include "BuildingBase.h"
 #include "SpawnableBuilding.generated.h"
 
+class UHealthComponent;
+
 /**
  * 
  */
@@ -15,5 +17,13 @@ class TOWERDEFENSE_API ASpawnableBuilding : public ABuildingBase
 	GENERATED_BODY()
 
 public:
+	ASpawnableBuilding();
+
 	virtual void DestroyBuilding() PURE_VIRTUAL(&ASpawnableBuilding::DestroyBuilding, );
+
+	UHealthComponent* GetHealthComponent() const;
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	UHealthComponent* HealthComponent;
 };
