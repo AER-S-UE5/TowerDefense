@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "BuildingBase.generated.h"
 
-UCLASS()
+UCLASS(NotBlueprintable)
 class TOWERDEFENSE_API ABuildingBase : public AActor
 {
 	GENERATED_BODY()
@@ -14,9 +14,6 @@ class TOWERDEFENSE_API ABuildingBase : public AActor
 private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* DefaultSceneComponent;
-	
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* BuildingMesh;
 
 
 	

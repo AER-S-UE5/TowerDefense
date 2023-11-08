@@ -4,20 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "BuildingBase.h"
-#include "Tower.generated.h"
+#include "SpawnableBuilding.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TOWERDEFENSE_API ATower : public ABuildingBase
+class TOWERDEFENSE_API ASpawnableBuilding : public ABuildingBase
 {
 	GENERATED_BODY()
 
 public:
-	ATower();
-
-private:
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* TowerMesh;
+	virtual void DestroyBuilding() PURE_VIRTUAL(&ASpawnableBuilding::DestroyBuilding, );
 };

@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class TOWERDEFENSE_API ATargetTower : public ATower
 {
 	GENERATED_BODY()

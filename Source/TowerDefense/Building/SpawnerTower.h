@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class TOWERDEFENSE_API ASpawnerTower : public ATower
 {
 	GENERATED_BODY()

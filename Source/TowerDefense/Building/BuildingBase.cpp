@@ -10,8 +10,6 @@ ABuildingBase::ABuildingBase()
 	PrimaryActorTick.bCanEverTick = true;
 	DefaultSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Default Scene Component"));
 	RootComponent = DefaultSceneComponent;
-	BuildingMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Building Mesh"));
-	BuildingMesh->SetupAttachment(DefaultSceneComponent);
 }
 
 // Called when the game starts or when spawned

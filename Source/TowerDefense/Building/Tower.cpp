@@ -3,3 +3,8 @@
 
 #include "Tower.h"
 
+ATower::ATower()
+{
+	TowerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tower Mesh"));
+	TowerMesh->SetupAttachment(RootComponent);
+}
