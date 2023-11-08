@@ -24,6 +24,7 @@ ATurretBase::ATurretBase()
 
 void ATurretBase::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 	if (IsEnemyInRange())
 	{
 		LookAtEnemy(InRangeEnemies[0]);
@@ -35,12 +36,21 @@ void ATurretBase::BeginPlay()
 	Super::BeginPlay();
 	Radar->OnComponentBeginOverlap.AddDynamic(this, &ATurretBase::OnOverlapBegin);
 	Radar->OnComponentEndOverlap.AddDynamic(this, &ATurretBase::OnOverlapEnd);
+
+	FTimerHandle FireTimerHandle;
+	GetWorldTimerManager().SetTimer(FireTimerHandle, this, &ATurretBase::Attack, FireRate, true);
+	
 }
 
 
 TArray<AEnemy*> ATurretBase::GetInRangeEnemies() const
 {
 	return InRangeEnemies;
+}
+
+USceneComponent* ATurretBase::GetFiringPoint() const
+{
+	return FiringPoint;
 }
 
 void ATurretBase::OnOverlapBegin(UPrimitiveComponent* OverlapComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -67,6 +77,14 @@ bool ATurretBase::IsEnemyInRange() const
 void ATurretBase::LookAtEnemy(AEnemy* Enemy)
 {
 	FVector LookAtDirection = Enemy->GetActorLocation() - GetActorLocation();
-	LookAtDirection.Z = TurretMesh->GetComponentLocation().Z;
+	LookAtDirection.Z = 0;
 	TurretMesh->SetRelativeRotation(LookAtDirection.Rotation());
+}
+
+void ATurretBase::Attack()
+{
+	if (IsEnemyInRange())
+	{
+		Fire();
+	}
 }

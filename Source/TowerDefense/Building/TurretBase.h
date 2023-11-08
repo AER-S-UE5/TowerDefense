@@ -25,6 +25,8 @@ protected:
 	virtual void BeginPlay() override;
 	TArray<AEnemy*> GetInRangeEnemies() const;
 
+	USceneComponent* GetFiringPoint()const;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* Radar;
@@ -38,6 +40,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* FiringPoint;
 
+	UPROPERTY(EditDefaultsOnly,Category = "Combat")
+	float FireRate = 1;
+
+
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlapComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
@@ -50,4 +56,6 @@ private:
 	bool IsEnemyInRange() const;
 
 	void LookAtEnemy(AEnemy* Enemy);
+
+	void Attack();
 };

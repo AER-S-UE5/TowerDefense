@@ -6,6 +6,7 @@
 #include "TurretBase.h"
 #include "MachineGunTurret.generated.h"
 
+
 /**
  * 
  */
@@ -18,6 +19,11 @@ public:
 	virtual void DestroyBuilding() override;
 
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Combat")
+	class UNiagaraSystem* FiringParticleSystem;
+
+	
+
 	virtual void Fire() override;
 
 };
