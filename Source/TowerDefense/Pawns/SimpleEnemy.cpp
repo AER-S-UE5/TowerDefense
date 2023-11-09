@@ -31,6 +31,7 @@ void ASimpleEnemy::FollowPath()
 
 void ASimpleEnemy::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 	FollowPath();
 }
 

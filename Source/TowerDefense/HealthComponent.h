@@ -18,6 +18,9 @@ public:
 
 	void DecreaseHealth(float Amount);
 
+	UFUNCTION(BlueprintPure, BlueprintCallable )
+	float GetHealth() const;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -30,6 +33,7 @@ private:
 
 	UFUNCTION()
 	void TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* CausingDamageActor);
+
 
 	float Health;
 

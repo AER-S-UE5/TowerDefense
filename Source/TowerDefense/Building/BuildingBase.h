@@ -12,8 +12,8 @@ class TOWERDEFENSE_API ABuildingBase : public AActor
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(VisibleAnywhere)
-	USceneComponent* DefaultSceneComponent;
+// 	UPROPERTY(VisibleAnywhere)
+// 	USceneComponent* DefaultSceneComponent;
 
 
 	

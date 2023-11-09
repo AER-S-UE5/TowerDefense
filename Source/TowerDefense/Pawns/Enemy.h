@@ -33,7 +33,7 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float LocationPrecision = 0.1f;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UHealthComponent* HealthComponent;
 
 protected:
