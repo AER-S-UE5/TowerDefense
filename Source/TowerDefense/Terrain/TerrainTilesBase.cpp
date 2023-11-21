@@ -19,6 +19,11 @@ void ATerrainTilesBase::BeginPlay()
 	
 }
 
+UStaticMeshComponent* ATerrainTilesBase::GetTileMesh() const
+{
+	return TileMesh;
+}
+
 // Called every frame
 void ATerrainTilesBase::Tick(float DeltaTime)
 {

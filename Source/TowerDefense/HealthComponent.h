@@ -19,7 +19,7 @@ public:
 	void DecreaseHealth(float Amount);
 
 	UFUNCTION(BlueprintPure, BlueprintCallable )
-	float GetHealth() const;
+	float GetHealthPercentage() const;
 
 protected:
 	// Called when the game starts
@@ -34,7 +34,7 @@ private:
 	UFUNCTION()
 	void TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* Instigator, AActor* CausingDamageActor);
 
-
+	UPROPERTY(VisibleAnywhere, Category="Health")
 	float Health;
 
 	bool bIsAlive;

@@ -20,4 +20,6 @@ private:
 
 public:
 	ABuildingTerrainTile();
+
+	void OutlineTile(bool value);
 };

@@ -33,9 +33,9 @@ void UHealthComponent::DecreaseHealth(float Amount)
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
 	Health = MaxHealth;
+	UE_LOG(LogTemp, Warning, TEXT("Health = %f"),Health);
 	bIsAlive = true;
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::TakeDamage);
 }
@@ -59,9 +59,10 @@ void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDam
 	}
 }
 
-float UHealthComponent::GetHealth() const
+float UHealthComponent::GetHealthPercentage() const
 {
-	return Health;
+	float Percentage = Health / MaxHealth;
+	return Percentage;
 }
 
 

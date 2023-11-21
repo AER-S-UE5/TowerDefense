@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "../Terrain/BuildingTerrainTile.h"
 
 void APlayerPawn::Hover(const FInputActionValue& value)
 {
@@ -34,7 +35,7 @@ void APlayerPawn::ZoomInOut(const FInputActionValue& value)
 APlayerPawn::APlayerPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera Component"));
 	RootComponent = CameraComponent;
 
@@ -44,8 +45,10 @@ APlayerPawn::APlayerPawn()
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
 	{
+		PlayerController->bShowMouseCursor = true;
 		if (UEnhancedInputLocalPlayerSubsystem* EnhancedInputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			EnhancedInputLocalPlayerSubsystem->AddMappingContext(DefaultInputMappingContext, 0);
@@ -59,7 +62,28 @@ void APlayerPawn::BeginPlay()
 void APlayerPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (PlayerController != nullptr)
+	{
+		
+		FHitResult HitResult;
+		if (PlayerController->GetHitResultUnderCursor(ECC_Visibility, false, HitResult))
+		{
+			
+			ABuildingTerrainTile* HitActor = Cast<ABuildingTerrainTile>(HitResult.GetActor());
+			if (HitActor)
+			{
+				if (HitActor == HighligtedBuildingTile) return;
+				if(HighligtedBuildingTile) HighligtedBuildingTile->OutlineTile(false);
+				HighligtedBuildingTile = HitActor;
+				HighligtedBuildingTile->OutlineTile(true);
+			}
+			else
+			{
+				if(HighligtedBuildingTile) HighligtedBuildingTile->OutlineTile(false);
+				HighligtedBuildingTile = nullptr;
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input

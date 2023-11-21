@@ -22,6 +22,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	UStaticMeshComponent* GetTileMesh() const;
 
 public:	
 	// Called every frame

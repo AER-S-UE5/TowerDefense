@@ -8,3 +8,9 @@ ABuildingTerrainTile::ABuildingTerrainTile()
 	BuildingPoint = CreateDefaultSubobject<USceneComponent>(TEXT("Building Point"));
 	BuildingPoint->SetupAttachment(RootComponent);
 }
+
+void ABuildingTerrainTile::OutlineTile(bool value)
+{
+	if (!GetTileMesh()) return;
+	GetTileMesh()->SetRenderCustomDepth(value);
+}

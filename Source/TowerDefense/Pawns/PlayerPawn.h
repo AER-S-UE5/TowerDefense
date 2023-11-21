@@ -47,6 +47,8 @@ private:
 	void ZoomInOut(const FInputActionValue& value);
 
 	FVector OriginalLocation;
+	class ABuildingTerrainTile* HighligtedBuildingTile;
+	APlayerController* PlayerController;
 
 public:
 	// Sets default values for this pawn's properties
