@@ -31,6 +31,12 @@ void APlayerPawn::ZoomInOut(const FInputActionValue& value)
 	}
 }
 
+void APlayerPawn::SelectTile(const FInputActionValue& value)
+{
+	if (!HighligtedBuildingTile) return;
+
+}
+
 // Sets default values
 APlayerPawn::APlayerPawn()
 {
@@ -94,6 +100,7 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	{
 		EnhancedPlayerComponent->BindAction(HoverAction, ETriggerEvent::Triggered, this, &APlayerPawn::Hover);
 		EnhancedPlayerComponent->BindAction(ZoomInOutAction, ETriggerEvent::Triggered, this, &APlayerPawn::ZoomInOut);
+		EnhancedPlayerComponent->BindAction(SelectTileAction, ETriggerEvent::Triggered, this, &APlayerPawn::SelectTile);
 	}
 
 }

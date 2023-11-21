@@ -30,6 +30,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* ZoomInOutAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* SelectTileAction;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float HoverSpeed = 100;
 
@@ -45,6 +48,7 @@ private:
 private:
 	void Hover(const FInputActionValue& value);
 	void ZoomInOut(const FInputActionValue& value);
+	void SelectTile(const FInputActionValue& value);
 
 	FVector OriginalLocation;
 	class ABuildingTerrainTile* HighligtedBuildingTile;
