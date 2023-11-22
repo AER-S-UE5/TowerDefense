@@ -19,6 +19,7 @@ public:
 	void HideWidget(UUserWidget* WidgetToHide);
 	void ShowWidget(UUserWidget* WidgetToShow);
 	UBuildingWidget* GetBuildingWidget() const;
+	void Build(TSubclassOf<ASpawnableBuilding> BuildingClass,class ABuildingTerrainTile* TileToBuildOn);
 
 protected:
 	virtual void BeginPlay() override;
@@ -28,4 +29,6 @@ private:
 	TSubclassOf<UBuildingWidget> BuildingWidgetClass;
 
 	UBuildingWidget* BuildingWidget;
+
+	class APlayerPawn* Player;
 };

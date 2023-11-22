@@ -35,9 +35,9 @@ void APlayerPawn::ZoomInOut(const FInputActionValue& value)
 void APlayerPawn::SelectTile(const FInputActionValue& value)
 {
 	if (!HighligtedBuildingTile) return;
-	SwitchInputMappingContextTo(BuildingInputMappingContext);
 	TDGameMode->GetBuildingWidget()->SetTileToBuildOn(HighligtedBuildingTile);
 	TDGameMode->ShowWidget(TDGameMode->GetBuildingWidget());
+	SwitchInputMappingContextTo(BuildingInputMappingContext);
 }
 
 void APlayerPawn::CloseBuildingWidget(const FInputActionValue& value)
@@ -48,8 +48,10 @@ void APlayerPawn::CloseBuildingWidget(const FInputActionValue& value)
 
 void APlayerPawn::SwitchInputMappingContextTo(UInputMappingContext* value)
 {
+	
 	EnhancedInputLocalPlayerSubsystem->ClearAllMappings();
 	EnhancedInputLocalPlayerSubsystem->AddMappingContext(value, 0);
+	
 }
 
 // Sets default values
@@ -74,7 +76,7 @@ void APlayerPawn::BeginPlay()
 		EnhancedInputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 		if (EnhancedInputLocalPlayerSubsystem)
 		{
-			EnhancedInputLocalPlayerSubsystem->AddMappingContext(DefaultInputMappingContext, 0);
+			SetPlayerState(PlayerState::Default);
 		}
 	}
 
@@ -121,5 +123,21 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedPlayerComponent->BindAction(CloseWidgetAction, ETriggerEvent::Triggered, this, &APlayerPawn::CloseBuildingWidget);
 	}
 
+}
+
+void APlayerPawn::SetPlayerState(PlayerState value)
+{
+	switch (value)
+	{
+	case PlayerState::Building:
+		CurrentPlayerState = PlayerState::Building;
+		SwitchInputMappingContextTo(BuildingInputMappingContext);
+		break;
+
+	default:
+		CurrentPlayerState = PlayerState::Default;
+		SwitchInputMappingContextTo(DefaultInputMappingContext);
+		break;
+	}
 }
 

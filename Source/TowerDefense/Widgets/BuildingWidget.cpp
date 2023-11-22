@@ -38,6 +38,18 @@ ABuildingTerrainTile* UBuildingWidget::GetTileToBuildOn() const
 	return TileToBuildOn;
 }
 
+
+
+void UBuildingWidget::Build(TSubclassOf<ASpawnableBuilding> BuildingClass)
+{
+	TDGameMode->Build(BuildingClass, TileToBuildOn);
+}
+
+void UBuildingWidget::SetGameMode(ATowerDefenseGameModeBase* value)
+{
+	TDGameMode = value;
+}
+
 void UBuildingWidget::NativeOnInitialized()
 {
 	Super::OnInitialized();

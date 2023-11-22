@@ -12,6 +12,7 @@ class UMovementComponent;
 class UInputMappingContext;
 class UInputAction;
 
+
 UCLASS()
 class TOWERDEFENSE_API APlayerPawn : public APawn
 {
@@ -20,6 +21,12 @@ class TOWERDEFENSE_API APlayerPawn : public APawn
 public:
 	// Sets default values for this pawn's properties
 	APlayerPawn();
+	
+	enum PlayerState
+	{
+		Default,
+		Building
+	};
 
 public:	
 	// Called every frame
@@ -27,6 +34,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void SetPlayerState(PlayerState value);
 
 protected:
 	// Called when the game starts or when spawned
@@ -79,5 +88,7 @@ private:
 	class ABuildingTerrainTile* HighligtedBuildingTile;
 	APlayerController* PlayerController;
 	class ATowerDefenseGameModeBase* TDGameMode;
+	
+	PlayerState CurrentPlayerState;
 
 };

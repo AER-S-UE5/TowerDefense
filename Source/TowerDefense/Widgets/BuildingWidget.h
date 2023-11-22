@@ -7,7 +7,7 @@
 #include "BuildingWidget.generated.h"
 
 class ASpawnableBuilding;
-
+class ATowerDefenseGameModeBase;
 /**
  * 
  */
@@ -20,6 +20,8 @@ public:
 	void Populate();
 	void SetTileToBuildOn(class ABuildingTerrainTile* value);
 	ABuildingTerrainTile* GetTileToBuildOn() const;
+	void Build(TSubclassOf<ASpawnableBuilding> BuildingClass);
+	void SetGameMode(ATowerDefenseGameModeBase* value);
 
 
 protected:
@@ -27,7 +29,7 @@ protected:
 	
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Buildings")
-	TMap<TSubclassOf<class ASpawnableBuilding>, class UTexture2D* > SpawnableBuildings;
+	TMap<TSubclassOf<ASpawnableBuilding>, class UTexture2D* > SpawnableBuildings;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Elements")
 	TSubclassOf<class UBuildButton> BuildButtonClass;
@@ -37,4 +39,6 @@ private:
 	class UHorizontalBox* BuildingsBox;
 
 	ABuildingTerrainTile* TileToBuildOn;
+
+	ATowerDefenseGameModeBase* TDGameMode;
 };

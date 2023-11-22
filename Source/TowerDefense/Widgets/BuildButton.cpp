@@ -34,5 +34,5 @@ void UBuildButton::NativeOnInitialized()
 
 void UBuildButton::Build()
 {
-	GetWorld()->SpawnActor<ASpawnableBuilding>(BuildingClass, BuildingWidget->GetTileToBuildOn()->GetBuildingPoint()->GetComponentTransform());
+	BuildingWidget->Build(BuildingClass);
 }
