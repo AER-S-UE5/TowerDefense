@@ -13,3 +13,13 @@ UHealthComponent* ASpawnableBuilding::GetHealthComponent() const
 {
 	return HealthComponent;
 }
+
+FString ASpawnableBuilding::GetBuildingClassName() const
+{
+	return BuildingClassName;
+}
+
+void ASpawnableBuilding::SetClassName(FString value)
+{
+	BuildingClassName = value;
+}

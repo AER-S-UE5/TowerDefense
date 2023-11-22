@@ -16,6 +16,9 @@ class TOWERDEFENSE_API AMachineGunTurret : public ATurretBase
 	GENERATED_BODY()
 
 public:
+
+	AMachineGunTurret();
+
 	virtual void DestroyBuilding() override;
 
 private:

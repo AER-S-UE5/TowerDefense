@@ -24,10 +24,11 @@ protected:
 	
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Buildings")
-	TArray<TSubclassOf<class ASpawnableBuilding>> SpawnableBuildings;
+	TMap<TSubclassOf<class ASpawnableBuilding>, class UTexture2D* > SpawnableBuildings;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Elements")
 	TSubclassOf<class UBuildButton> BuildButtonClass;
+
 
 	UPROPERTY(meta =(BindWidget))
 	class UHorizontalBox* BuildingsBox;

@@ -7,6 +7,11 @@
 
 
 
+AMachineGunTurret::AMachineGunTurret()
+{
+	SetClassName(TEXT("Machine Gun Turret"));
+}
+
 void AMachineGunTurret::DestroyBuilding()
 {
 

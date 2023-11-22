@@ -23,7 +23,14 @@ public:
 
 	UHealthComponent* GetHealthComponent() const;
 
+	FString GetBuildingClassName() const;
+
+protected:
+	void SetClassName(FString value);
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	UHealthComponent* HealthComponent;
+
+	FString BuildingClassName;
 };

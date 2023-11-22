@@ -9,9 +9,16 @@
 
 void UBuildingWidget::Populate()
 {
-	for (int i = 0; i < SpawnableBuildings.Num(); i++)
+	TArray<TSubclassOf<ASpawnableBuilding>> SpawnableBuildingsKeys;
+	int32 SpawnableBuildingsElements = SpawnableBuildings.GetKeys(SpawnableBuildingsKeys);
+	for (int i = 0; i < SpawnableBuildingsElements; i++)
 	{
 		UBuildButton* NewBuildButton = WidgetTree->ConstructWidget<UBuildButton>(BuildButtonClass);
+		UClass* buildingClass = *SpawnableBuildingsKeys[i];
+		FString BuildingName = Cast<ASpawnableBuilding>(buildingClass->GetDefaultObject())->GetBuildingClassName();
+		NewBuildButton->SetBuildingName(BuildingName);
+		NewBuildButton->SetBuildingClass(SpawnableBuildingsKeys[i]);
+		if (SpawnableBuildings[SpawnableBuildingsKeys[i]]) NewBuildButton->SetBuildingIcon(SpawnableBuildings[SpawnableBuildingsKeys[i]]);
 		BuildingsBox->AddChildToHorizontalBox(NewBuildButton);
 	}
 	
