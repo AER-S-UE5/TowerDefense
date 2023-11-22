@@ -14,3 +14,8 @@ void ABuildingTerrainTile::OutlineTile(bool value)
 	if (!GetTileMesh()) return;
 	GetTileMesh()->SetRenderCustomDepth(value);
 }
+
+USceneComponent* ABuildingTerrainTile::GetBuildingPoint() const
+{
+	return BuildingPoint;
+}

@@ -13,13 +13,17 @@ UCLASS()
 class TOWERDEFENSE_API ABuildingTerrainTile : public ATerrainTilesBase
 {
 	GENERATED_BODY()
-	
-private:
-	UPROPERTY(VisibleAnywhere)
-	USceneComponent* BuildingPoint;
 
 public:
 	ABuildingTerrainTile();
 
 	void OutlineTile(bool value);
+
+	USceneComponent* GetBuildingPoint() const;
+	
+private:
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* BuildingPoint;
+
+
 };

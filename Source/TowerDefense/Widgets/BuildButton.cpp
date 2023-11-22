@@ -4,6 +4,8 @@
 #include "BuildButton.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
+#include "Components/Button.h"
+#include "BuildingWidget.h"
 
 void UBuildButton::SetBuildingName(FString value)
 {
@@ -18,4 +20,19 @@ void UBuildButton::SetBuildingIcon(UTexture2D* value)
 void UBuildButton::SetBuildingClass(TSubclassOf<ASpawnableBuilding> value)
 {
 	BuildingClass = value;
+}
+
+void UBuildButton::SetBuildingWidget(UBuildingWidget* Widget)
+{
+	BuildingWidget = Widget;
+}
+
+void UBuildButton::NativeOnInitialized()
+{
+	BuildButton->OnClicked.AddDynamic(this, &UBuildButton::Build);
+}
+
+void UBuildButton::Build()
+{
+	GetWorld()->SpawnActor<ASpawnableBuilding>(BuildingClass, BuildingWidget->GetTileToBuildOn()->GetBuildingPoint()->GetComponentTransform());
 }

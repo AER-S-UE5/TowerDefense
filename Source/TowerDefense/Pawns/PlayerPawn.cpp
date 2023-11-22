@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Terrain/BuildingTerrainTile.h"
+#include "../TowerDefenseGameModeBase.h"
 
 void APlayerPawn::Hover(const FInputActionValue& value)
 {
@@ -34,7 +35,21 @@ void APlayerPawn::ZoomInOut(const FInputActionValue& value)
 void APlayerPawn::SelectTile(const FInputActionValue& value)
 {
 	if (!HighligtedBuildingTile) return;
+	SwitchInputMappingContextTo(BuildingInputMappingContext);
+	TDGameMode->GetBuildingWidget()->SetTileToBuildOn(HighligtedBuildingTile);
+	TDGameMode->ShowWidget(TDGameMode->GetBuildingWidget());
+}
 
+void APlayerPawn::CloseBuildingWidget(const FInputActionValue& value)
+{
+	if (TDGameMode) TDGameMode->HideWidget(TDGameMode->GetBuildingWidget());
+	SwitchInputMappingContextTo(DefaultInputMappingContext);
+}
+
+void APlayerPawn::SwitchInputMappingContextTo(UInputMappingContext* value)
+{
+	EnhancedInputLocalPlayerSubsystem->ClearAllMappings();
+	EnhancedInputLocalPlayerSubsystem->AddMappingContext(value, 0);
 }
 
 // Sets default values
@@ -50,12 +65,14 @@ APlayerPawn::APlayerPawn()
 // Called when the game starts or when spawned
 void APlayerPawn::BeginPlay()
 {
+	TDGameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
 	Super::BeginPlay();
 	PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController)
 	{
 		PlayerController->bShowMouseCursor = true;
-		if (UEnhancedInputLocalPlayerSubsystem* EnhancedInputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		EnhancedInputLocalPlayerSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+		if (EnhancedInputLocalPlayerSubsystem)
 		{
 			EnhancedInputLocalPlayerSubsystem->AddMappingContext(DefaultInputMappingContext, 0);
 		}
@@ -70,7 +87,7 @@ void APlayerPawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (PlayerController != nullptr)
 	{
-		
+		if (!EnhancedInputLocalPlayerSubsystem->HasMappingContext(DefaultInputMappingContext))return;
 		FHitResult HitResult;
 		if (PlayerController->GetHitResultUnderCursor(ECC_Visibility, false, HitResult))
 		{
@@ -101,6 +118,7 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedPlayerComponent->BindAction(HoverAction, ETriggerEvent::Triggered, this, &APlayerPawn::Hover);
 		EnhancedPlayerComponent->BindAction(ZoomInOutAction, ETriggerEvent::Triggered, this, &APlayerPawn::ZoomInOut);
 		EnhancedPlayerComponent->BindAction(SelectTileAction, ETriggerEvent::Triggered, this, &APlayerPawn::SelectTile);
+		EnhancedPlayerComponent->BindAction(CloseWidgetAction, ETriggerEvent::Triggered, this, &APlayerPawn::CloseBuildingWidget);
 	}
 
 }

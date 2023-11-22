@@ -17,12 +17,30 @@ class TOWERDEFENSE_API APlayerPawn : public APawn
 {
 	GENERATED_BODY()
 
+public:
+	// Sets default values for this pawn's properties
+	APlayerPawn();
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputMappingContext* DefaultInputMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputMappingContext* BuildingInputMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* HoverAction;
@@ -32,6 +50,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* SelectTileAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* CloseWidgetAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float HoverSpeed = 100;
@@ -49,24 +70,14 @@ private:
 	void Hover(const FInputActionValue& value);
 	void ZoomInOut(const FInputActionValue& value);
 	void SelectTile(const FInputActionValue& value);
+	void CloseBuildingWidget(const FInputActionValue& value);
+	void SwitchInputMappingContextTo(UInputMappingContext* value);
+
+	class UEnhancedInputLocalPlayerSubsystem* EnhancedInputLocalPlayerSubsystem;
 
 	FVector OriginalLocation;
 	class ABuildingTerrainTile* HighligtedBuildingTile;
 	APlayerController* PlayerController;
-
-public:
-	// Sets default values for this pawn's properties
-	APlayerPawn();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	class ATowerDefenseGameModeBase* TDGameMode;
 
 };

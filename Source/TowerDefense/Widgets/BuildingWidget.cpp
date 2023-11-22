@@ -6,6 +6,7 @@
 #include "Blueprint/WidgetTree.h"
 #include "BuildButton.h"
 #include "Components/HorizontalBox.h"
+#include "../Terrain/BuildingTerrainTile.h"
 
 void UBuildingWidget::Populate()
 {
@@ -18,14 +19,27 @@ void UBuildingWidget::Populate()
 		FString BuildingName = Cast<ASpawnableBuilding>(buildingClass->GetDefaultObject())->GetBuildingClassName();
 		NewBuildButton->SetBuildingName(BuildingName);
 		NewBuildButton->SetBuildingClass(SpawnableBuildingsKeys[i]);
+		NewBuildButton->SetBuildingWidget(this);
 		if (SpawnableBuildings[SpawnableBuildingsKeys[i]]) NewBuildButton->SetBuildingIcon(SpawnableBuildings[SpawnableBuildingsKeys[i]]);
 		BuildingsBox->AddChildToHorizontalBox(NewBuildButton);
 	}
 	
 }
 
-void UBuildingWidget::NativeConstruct()
+
+
+void UBuildingWidget::SetTileToBuildOn(class ABuildingTerrainTile* value)
 {
-	Super::NativeConstruct();
+	TileToBuildOn = value;
+}
+
+ABuildingTerrainTile* UBuildingWidget::GetTileToBuildOn() const
+{
+	return TileToBuildOn;
+}
+
+void UBuildingWidget::NativeOnInitialized()
+{
+	Super::OnInitialized();
 	Populate();
 }

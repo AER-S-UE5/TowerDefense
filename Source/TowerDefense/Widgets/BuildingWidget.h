@@ -18,9 +18,12 @@ class TOWERDEFENSE_API UBuildingWidget : public UUserWidget
 
 public:
 	void Populate();
+	void SetTileToBuildOn(class ABuildingTerrainTile* value);
+	ABuildingTerrainTile* GetTileToBuildOn() const;
+
 
 protected:
-	virtual void NativeConstruct() override;
+	virtual void NativeOnInitialized() override;
 	
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Buildings")
@@ -32,4 +35,6 @@ private:
 
 	UPROPERTY(meta =(BindWidget))
 	class UHorizontalBox* BuildingsBox;
+
+	ABuildingTerrainTile* TileToBuildOn;
 };

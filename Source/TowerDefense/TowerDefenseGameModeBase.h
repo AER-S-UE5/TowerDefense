@@ -14,6 +14,12 @@ UCLASS()
 class TOWERDEFENSE_API ATowerDefenseGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+public:
+	void CreateBuildingWidget();
+	void HideWidget(UUserWidget* WidgetToHide);
+	void ShowWidget(UUserWidget* WidgetToShow);
+	UBuildingWidget* GetBuildingWidget() const;
+
 protected:
 	virtual void BeginPlay() override;
 

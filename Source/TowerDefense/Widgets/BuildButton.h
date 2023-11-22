@@ -23,6 +23,10 @@ public:
 
 	void SetBuildingClass(TSubclassOf<ASpawnableBuilding> value);
 
+	void SetBuildingWidget(class UBuildingWidget* Widget);
+protected:
+	virtual void NativeOnInitialized() override;
+
 private:
 	UPROPERTY(meta =(BindWidget))
 	class UTextBlock* BuildingName;
@@ -34,5 +38,10 @@ private:
 	class UImage* BuildingIcon;
 
 	TSubclassOf<ASpawnableBuilding> BuildingClass;
+
+	class UBuildingWidget* BuildingWidget;
+
+	UFUNCTION()
+	void Build();
 	
 };
