@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Utility/LevelData.h"
 #include "GameFramework/GameModeBase.h"
 #include "TowerDefenseGameModeBase.generated.h"
 
@@ -27,6 +28,12 @@ protected:
 private:
 	UPROPERTY(EditDefaultsOnly, Category ="Widgets")
 	TSubclassOf<UBuildingWidget> BuildingWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category ="Levels")
+	TArray<FLevelData> Levels;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Levels")
+	int32 CurrentLevelIndex = 1;
 
 	UBuildingWidget* BuildingWidget;
 
