@@ -29,6 +29,7 @@ private:
 	UPROPERTY(EditInstanceOnly)
 	class APath* ArmyPath;
 
+
 private:
 
 };

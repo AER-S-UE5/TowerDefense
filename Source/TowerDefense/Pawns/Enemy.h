@@ -23,6 +23,13 @@ public:
 	UHealthComponent* GetHealthComponent() const;
 	virtual void Die() PURE_VIRTUAL(AEnemy::Die, );
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	float GetPrecision() const;
+	APath* GetPath() const;
+	class ATowerDefenseGameModeBase* GetGameMode();
+
 private:
 	void GetNextDestination();
 
@@ -35,15 +42,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UHealthComponent* HealthComponent;
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-	float GetPrecision() const;
-	APath* GetPath() const;
-
-public:	
 	
-	
+	ATowerDefenseGameModeBase* GameMode;
 	
 };

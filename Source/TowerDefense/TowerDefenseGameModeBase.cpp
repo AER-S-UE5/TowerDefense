@@ -49,10 +49,26 @@ void ATowerDefenseGameModeBase::Build(TSubclassOf<ASpawnableBuilding> BuildingCl
 void ATowerDefenseGameModeBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	if (CurrentLevelIndex >= Levels.Num()) return;
+	if (IsGameLost())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GameLost..."));
+		return;
+	}
+
+	if (IsGameWon())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GameWon..."));
+		return;
+	}
+
 	if (CurrentWaveIndex >= EnemiesWaves.Num()) return;
 	HandleEnemiesSpawning(DeltaSeconds);
 	HandleEnemiesWaves(DeltaSeconds);
+}
+
+void ATowerDefenseGameModeBase::DeacrementEnemiesCount()
+{
+	--EnemiesCount;
 }
 
 void ATowerDefenseGameModeBase::BeginPlay()
@@ -60,6 +76,8 @@ void ATowerDefenseGameModeBase::BeginPlay()
 	Super::BeginPlay();
 	Player = Cast<APlayerPawn>(UGameplayStatics::GetPlayerPawn(this, 0));
 	SpawnerTower =Cast<ASpawnerTower>(UGameplayStatics::GetActorOfClass(this, SpawnerTowerClass));
+	TargetTower = Cast<ATargetTower>(UGameplayStatics::GetActorOfClass(this, TargetTowerClass));
+	EnemiesCount = 0;
 	EnemyWaveTimer = 0;
 	EnemySpawningTimer = 0;
 	CurrentWaveIndex = 0;
@@ -117,6 +135,7 @@ void ATowerDefenseGameModeBase::HandleEnemiesSpawning(float DeltaSeconds)
 			EnemySpawningTimer = 0;
 			TSubclassOf<AEnemy> EnemyClass = WaveEnemies.CreateConstIterator().Key();
 			SpawnerTower->SpawnEnemy(EnemyClass);
+			++EnemiesCount;
 			if (WaveEnemies[EnemyClass]-1 > 0)
 			{
 				WaveEnemies.Add(EnemyClass, WaveEnemies[EnemyClass] - 1);
@@ -133,4 +152,16 @@ void ATowerDefenseGameModeBase::HandleEnemiesSpawning(float DeltaSeconds)
 	{
 		EnemySpawningTimer += DeltaSeconds;
 	}
+}
+
+bool ATowerDefenseGameModeBase::IsGameLost()
+{
+	return (!(TargetTower->IsSafe()));
+}
+
+bool ATowerDefenseGameModeBase::IsGameWon()
+{
+	bool FirstCondition = CurrentWaveIndex >= EnemiesWaves.Num() && TargetTower->IsSafe();
+	bool SecondCondition = CurrentWaveIndex == EnemiesWaves.Num() - 1 && EnemiesWaves.Num() == 0 && EnemiesCount<=0 ;
+	return(FirstCondition || SecondCondition);
 }

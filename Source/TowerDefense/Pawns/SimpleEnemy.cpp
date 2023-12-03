@@ -44,8 +44,9 @@ void ASimpleEnemy::BeginPlay()
 
 void ASimpleEnemy::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& HitResult)
 {
-	if (Cast<ATargetTower>(OtherActor))
+	if (ATargetTower* TargetTower = Cast<ATargetTower>(OtherActor))
 	{
+		TargetTower->Breach();
 		Die();
 	}
 }
@@ -71,5 +72,6 @@ void ASimpleEnemy::MoveTowards(FVector Destination)
 
 void ASimpleEnemy::Die()
 {
+	GetGameMode()->DeacrementEnemiesCount();
 	Destroy();
 }

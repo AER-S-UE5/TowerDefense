@@ -26,3 +26,4 @@ void ASpawnerTower::SpawnEnemy(TSubclassOf<AEnemy> EnemyClass)
 	UGameplayStatics::FinishSpawningActor(NewEnemy, SpawningPoint->GetComponentTransform());
 
 }
+

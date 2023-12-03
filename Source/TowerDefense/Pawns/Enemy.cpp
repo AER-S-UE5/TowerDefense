@@ -4,6 +4,8 @@
 #include "Enemy.h"
 #include "../Paths/Path.h"
 #include "../HealthComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "../TowerDefenseGameModeBase.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -17,7 +19,7 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GameMode = Cast<ATowerDefenseGameModeBase>(UGameplayStatics::GetGameMode(this));
 }
 
 // Called every frame
@@ -40,6 +42,11 @@ UHealthComponent* AEnemy::GetHealthComponent() const
 APath* AEnemy::GetPath() const
 {
 	return Path;
+}
+
+class ATowerDefenseGameModeBase* AEnemy::GetGameMode()
+{
+	return GameMode;
 }
 
 float AEnemy::GetPrecision() const
