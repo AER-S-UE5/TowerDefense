@@ -16,15 +16,13 @@ void ASpawnerTower::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("%s is ArmyPath Name...."), *(ArmyPath->GetName()));
-	FTimerHandle SpawningEnemyTimerHandle;
-	FTimerDelegate SpawnEnemyTimerDelegate = FTimerDelegate::CreateUObject(this, &ASpawnerTower::SpawnEnemy, ArmyPath);
-	GetWorldTimerManager().SetTimer(SpawningEnemyTimerHandle, SpawnEnemyTimerDelegate, 5, true);
+
 }
 
-void ASpawnerTower::SpawnEnemy(APath* PassedPath)
+void ASpawnerTower::SpawnEnemy(TSubclassOf<AEnemy> EnemyClass)
 {
 	AEnemy* NewEnemy = GetWorld()->SpawnActorDeferred<AEnemy>(EnemyClass, SpawningPoint->GetComponentTransform());
-	NewEnemy->SetPath(PassedPath);
+	NewEnemy->SetPath(ArmyPath);
 	UGameplayStatics::FinishSpawningActor(NewEnemy, SpawningPoint->GetComponentTransform());
 
 }
