@@ -59,4 +59,6 @@ private:
 
 	void InitilizeWaves();
 	void InitilizeWavesEnemies();
+	void HandleEnemiesWaves(float DeltaSeconds);
+	void HandleEnemiesSpawning(float DeltaSeconds);
 };
