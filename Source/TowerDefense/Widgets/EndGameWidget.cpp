@@ -2,9 +2,30 @@
 
 
 #include "EndGameWidget.h"
+
+#include "Components/Button.h"
 #include "Components/TextBlock.h"
 
 
+void UEndGameWidget::SetGameMode(ATowerDefenseGameModeBase* value)
+{
+	GameMode = value;
+}
+
+void UEndGameWidget::SetEndGameWidget(UEndGameWidget* value)
+{
+	EndGameWidget = value;
+}
+
+void UEndGameWidget::SetEndGameMessage(const FString& Value) const
+{
+	EndGameMessage->SetText(FText::FromString(Value));
+}
+
+void UEndGameWidget::SetEndGameMessageColor(FColor color) const
+{
+	EndGameMessage->SetColorAndOpacity(FSlateColor(color));
+}
 
 void UEndGameWidget::NativeOnInitialized()
 {

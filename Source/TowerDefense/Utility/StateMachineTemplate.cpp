@@ -64,15 +64,20 @@ void StateMachineTemplate<T,U>::AddFromAnyTransition(T* ToState, Condition Fun)
 template <typename T, typename U>
 U* StateMachineTemplate<T,U>::GetTransition()
 {
-	for (auto Transition : FromAnyStateTransitions)
+	if(!FromAnyStateTransitions.IsEmpty())
 	{
-		if(Transition->Func()) return Transition;
+		for (auto Transition : FromAnyStateTransitions)
+		{
+			if(Transition && Transition->Func()) return Transition;
+		}
 	}
 
-	for (auto Transition : CurrentStateTransitions)
+	if(!CurrentStateTransitions.IsEmpty())
 	{
-		//if (std::invoke(Transition->Func)) return Transition;
-		if(Transition->Func()) return Transition;
+		for (auto Transition : CurrentStateTransitions)
+		{
+			if(Transition && Transition->Func()) return Transition;
+		}
 	}
 
 	return nullptr;

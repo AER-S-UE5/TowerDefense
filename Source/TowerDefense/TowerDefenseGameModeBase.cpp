@@ -10,19 +10,13 @@
 #include "Terrain/BuildingTerrainTile.h"
 #include "Kismet/GameplayStatics.h"
 #include "Pawns/PlayerPawn.h"
+#include "Widgets/EndGameWidget.h"
 
 
 ATowerDefenseGameModeBase::ATowerDefenseGameModeBase()
 {
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	PrimaryActorTick.bCanEverTick = true;
-}
-
-void ATowerDefenseGameModeBase::CreateBuildingWidget()
-{
-	
-	BuildingWidget = Cast<UBuildingWidget>(CreateWidget(GetWorld(), BuildingWidgetClass, "BuildingWidget"));
-	BuildingWidget->SetGameMode(this);
 }
 
 void ATowerDefenseGameModeBase::HideWidget(UUserWidget* WidgetToHide)
@@ -51,10 +45,12 @@ void ATowerDefenseGameModeBase::Build(TSubclassOf<ASpawnableBuilding> BuildingCl
 void ATowerDefenseGameModeBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	if(EndGameResult == None && IsGameLost()) EndGameResult = Lose;
+	if(EndGameResult == None && IsGameWon()) EndGameResult = Win;
 	StateMachine->Tick(DeltaSeconds);
 }
 
-void ATowerDefenseGameModeBase::DecrementEnemiesCount()
+void ATowerDefenseGameModeBase::DecrementEnemiesCount() const
 {
 	if(UPlayGameModeState* PGM = Cast<UPlayGameModeState> (StateMachine->GetCurrentState()))
 	{
@@ -62,11 +58,18 @@ void ATowerDefenseGameModeBase::DecrementEnemiesCount()
 	}
 }
 
+EGState ATowerDefenseGameModeBase::GetEndGameResult() const
+{
+	return EndGameResult;
+}
+
 void ATowerDefenseGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
+	EndGameResult = None;
 	Player = Cast<APlayerPawn>(UGameplayStatics::GetPlayerPawn(this, 0));
-	CreateBuildingWidget();
+	BuildingWidget = CreateGMWidget<UBuildingWidget>(BuildingWidgetClass,"BuildingWidget");
+	EndGameWidget = CreateGMWidget<UEndGameWidget>(EndGameWidgetClass, "EndGameWidget");
 	SetupStateMachine();
 }
 
@@ -75,9 +78,9 @@ void ATowerDefenseGameModeBase::SetupStateMachine()
 {
 	StateMachine = NewObject<UGameModeStateMachine>();
 	PlayGameState = NewObject<UPlayGameModeState>();
-	EndGameState = NewObject<UEndGameModeState>();
-	
 	PlayGameState->Initialize(this,SpawnerTowerClass, TargetTowerClass, Levels[CurrentLevelIndex]);
+	EndGameState = NewObject<UEndGameModeState>();
+	EndGameState->Initialize(this,EndGameWidget);
 	StateMachine->AddTransition(PlayGameState,
 								EndGameState,
 								[this](){return ((this->StateMachine->GetCurrentState()== PlayGameState )&&((this->IsGameLost()||this->IsGameWon())));});
@@ -85,12 +88,13 @@ void ATowerDefenseGameModeBase::SetupStateMachine()
 	
 }
 
-bool ATowerDefenseGameModeBase::IsGameWon() 
+bool ATowerDefenseGameModeBase::IsGameWon() const
 {
 	return (Cast<UPlayGameModeState>(StateMachine->GetCurrentState())->IsGameWon());
 }
 
-bool ATowerDefenseGameModeBase::IsGameLost() 
+bool ATowerDefenseGameModeBase::IsGameLost() const
 {
 	return (Cast<UPlayGameModeState>(StateMachine->GetCurrentState())->IsGameLost());
 }
+
