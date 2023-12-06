@@ -5,10 +5,13 @@
 #include "CoreMinimal.h"
 #include "Utility/LevelData.h"
 #include "GameFramework/GameModeBase.h"
-#include "Utility/Wave.h"
 #include "TowerDefenseGameModeBase.generated.h"
 
 class UBuildingWidget;
+class ASpawnableBuilding;
+class UGameModeStateMachine;
+class UPlayGameModeState;
+class UEndGameModeState;
 /**
  * 
  */
@@ -19,12 +22,12 @@ class TOWERDEFENSE_API ATowerDefenseGameModeBase : public AGameModeBase
 public:
 	ATowerDefenseGameModeBase();
 	void CreateBuildingWidget();
-	void HideWidget(UUserWidget* WidgetToHide);
-	void ShowWidget(UUserWidget* WidgetToShow);
+	static void HideWidget(UUserWidget* WidgetToHide);
+	static void ShowWidget(UUserWidget* WidgetToShow);
 	UBuildingWidget* GetBuildingWidget() const;
-	void Build(TSubclassOf<ASpawnableBuilding> BuildingClass,class ABuildingTerrainTile* TileToBuildOn);
+	void Build(TSubclassOf<ASpawnableBuilding> BuildingClass,class ABuildingTerrainTile* TileToBuildOn) const;
 	virtual void Tick(float DeltaSeconds) override;
-	void DeacrementEnemiesCount();
+	void DecrementEnemiesCount();
 
 protected:
 	virtual void BeginPlay() override;
@@ -37,7 +40,7 @@ private:
 	TArray<FLevelData> Levels;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Levels")
-	int32 CurrentLevelIndex = 1;
+	int32 CurrentLevelIndex = 0;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Settings")
 	TSubclassOf<class ASpawnerTower> SpawnerTowerClass;
@@ -45,28 +48,19 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Settings")
 	TSubclassOf<class ATargetTower> TargetTowerClass;
 
+
 	UBuildingWidget* BuildingWidget;
 
+	UGameModeStateMachine* StateMachine;
+	UPlayGameModeState* PlayGameState;
+	UEndGameModeState* EndGameState;
+	
+
 	class APlayerPawn* Player;
+	
 
-	ASpawnerTower* SpawnerTower;
-	ATargetTower* TargetTower;
+	bool IsGameLost() ;
+	bool IsGameWon() ;
 
-	TArray<FWave> EnemiesWaves;
-	TMap<TSubclassOf<AEnemy>, int32> WaveEnemies;
-
-	float EnemySpawningTimer;
-	float EnemySpawningInterval;
-	float EnemyWaveTimer;
-	float EnemyWaveLength;
-	int32 CurrentWaveIndex;
-	int32 CurrentEnemyIndex;
-	int32 EnemiesCount;
-
-	void InitilizeWaves();
-	void InitilizeWavesEnemies();
-	void HandleEnemiesWaves(float DeltaSeconds);
-	void HandleEnemiesSpawning(float DeltaSeconds);
-	bool IsGameLost();
-	bool IsGameWon();
+	void SetupStateMachine();
 };

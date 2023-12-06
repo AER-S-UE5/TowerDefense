@@ -6,6 +6,8 @@
 #include "../Terrain/RoadTerrainTile.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Building/TargetTower.h"
+#include "../TowerDefenseGameModeBase.h"
+#include "Components/StaticMeshComponent.h"
 
 
 ASimpleEnemy::ASimpleEnemy()
@@ -72,6 +74,6 @@ void ASimpleEnemy::MoveTowards(FVector Destination)
 
 void ASimpleEnemy::Die()
 {
-	GetGameMode()->DeacrementEnemiesCount();
+	GetGameMode()->DecrementEnemiesCount();
 	Destroy();
 }

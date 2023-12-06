@@ -1,3 +1,12 @@
+# Rider
+# Rider auto-generates .iml files, and contentModel.xml
+**/.idea/**/*.iml
+**/.idea/**/contentModel.xml
+**/.idea/**/modules.xml
+
+.idea/
+
+
 # Visual Studio 2015 user specific files
 .vs/
 
