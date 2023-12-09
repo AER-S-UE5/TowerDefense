@@ -16,6 +16,6 @@ class TOWERDEFENSE_API UIState : public UObject
 public:
 	virtual void OnEnter(){};
 	virtual void OnExit() {};
-	virtual void Tick(float DeltaTime){};
+	virtual void UpdateTick(float DeltaTime){};
 
 };

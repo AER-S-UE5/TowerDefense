@@ -5,6 +5,7 @@
 
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
+#include "Kismet/GameplayStatics.h"
 
 
 void UEndGameWidget::SetGameMode(ATowerDefenseGameModeBase* value)
@@ -41,7 +42,7 @@ void UEndGameWidget::PlayNextLevel()
 
 void UEndGameWidget::ReplayLevel()
 {
-
+	UGameplayStatics::OpenLevel(GetWorld(),FName( UGameplayStatics::GetCurrentLevelName(this)));
 }
 
 void UEndGameWidget::QuitGame()

@@ -25,13 +25,15 @@ class TOWERDEFENSE_API UPlayGameModeState : public UGameModeState
 public:
 	virtual void OnEnter() override;
 	virtual void OnExit() override;
-	virtual void Tick(float DeltaTime) override;
+	virtual void UpdateTick(float DeltaTime) override;
 	void DecrementEnemiesCount();
 
 	void Initialize(ATowerDefenseGameModeBase* ATDGMB, TSubclassOf<ASpawnerTower> AST, TSubclassOf<ATargetTower> ATT, const FLevelData&  LevelData);
 
 	bool IsGameLost() const;
 	bool IsGameWon() const;
+
+	
 
 private:
 
@@ -40,7 +42,7 @@ private:
 	ATargetTower* TargetTower;
 	TArray<FWave> EnemiesWaves;
 	TMap<TSubclassOf<AEnemy>, int32> WaveEnemies;
-
+	
 
 	float EnemySpawningTimer;
 	float EnemySpawningInterval;

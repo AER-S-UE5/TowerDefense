@@ -11,7 +11,7 @@
 void UPlayGameModeState::OnEnter()
 {
 	Super::OnEnter();
-	UGameplayStatics::SetGamePaused(this, false);
+	
 }
 
 void UPlayGameModeState::DecrementEnemiesCount()
@@ -22,24 +22,22 @@ void UPlayGameModeState::DecrementEnemiesCount()
 void UPlayGameModeState::OnExit()
 {
 	Super::OnExit();
-	UGameplayStatics::SetGamePaused(this, true);
 }
 
-void UPlayGameModeState::Tick(float DeltaTime)
+void UPlayGameModeState::UpdateTick(float DeltaTime)
 {
-	UE_LOG(LogTemp, Warning, TEXT("PlayGameModeState Updating ..."));
-	Super::Tick(DeltaTime);
-	UE_LOG(LogTemp, Warning, TEXT("CurrentWaveIndex.. %d "), CurrentWaveIndex);
+	//UE_LOG(LogTemp, Warning, TEXT("PlayGameModeState Updating ..."));
+	Super::UpdateTick(DeltaTime);
+	//UE_LOG(LogTemp, Warning, TEXT("CurrentWaveIndex.. %d "), CurrentWaveIndex);
 	if (CurrentWaveIndex >= EnemiesWaves.Num()) return;
 	HandleEnemiesSpawning(DeltaTime);
 	HandleEnemiesWaves(DeltaTime);
 }
 
-void UPlayGameModeState::Initialize(ATowerDefenseGameModeBase* ATDGMB,TSubclassOf<ASpawnerTower> AST, TSubclassOf<ATargetTower> ATT, const FLevelData &LevelData )
+void UPlayGameModeState::Initialize(ATowerDefenseGameModeBase* ATDGMB,TSubclassOf<ASpawnerTower> AST, TSubclassOf<ATargetTower> ATT, const FLevelData &LevelData)
 {
 	Super::Initialize(ATDGMB);
 	SpawnerTower =Cast<ASpawnerTower>(UGameplayStatics::GetActorOfClass(GetGameMode(), AST));
-	if(SpawnerTower)UE_LOG(LogTemp, Warning, TEXT("Spawner Tower Exist..."));
 	TargetTower = Cast<ATargetTower>(UGameplayStatics::GetActorOfClass(GetGameMode(), ATT));
 	EnemiesCount = 0;
 	EnemyWaveTimer = 0;
@@ -63,6 +61,8 @@ bool UPlayGameModeState::IsGameWon() const
 	const bool SecondCondition = CurrentWaveIndex == EnemiesWaves.Num() - 1 && EnemiesWaves.Num() == 0 && EnemiesCount<=0 ;
 	return(FirstCondition || SecondCondition);
 }
+
+
 
 void UPlayGameModeState::InitializeWaves(const FLevelData &LevelData)
 {
@@ -103,7 +103,7 @@ void UPlayGameModeState::HandleEnemiesWaves(float DeltaSeconds)
 
 void UPlayGameModeState::HandleEnemiesSpawning(float DeltaSeconds)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Spawn Timer %f of %f"),EnemySpawningTimer, EnemySpawningInterval);
+	//UE_LOG(LogTemp, Warning, TEXT("Enemy Spawn Timer %f of %f"),EnemySpawningTimer, EnemySpawningInterval);
 	if (EnemySpawningTimer >= EnemySpawningInterval)
 	{
 		

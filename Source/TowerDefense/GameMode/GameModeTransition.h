@@ -7,12 +7,13 @@
 #include "../Utility/StateMachineTemplate.h"
 #include "GameModeTransition.generated.h"
 
+class ATowerDefenseGameModeBase;
 class UGameModeState;
 /**
  * 
  */
 UCLASS()
-class TOWERDEFENSE_API UGameModeTransition : public UObject, public STransition<UGameModeState>
+class TOWERDEFENSE_API UGameModeTransition : public UObject, public STransition<UGameModeState,ATowerDefenseGameModeBase>
 {
 	GENERATED_BODY()
 

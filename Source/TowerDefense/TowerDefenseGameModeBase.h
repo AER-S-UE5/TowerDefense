@@ -7,6 +7,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "TowerDefenseGameModeBase.generated.h"
 
+
 enum EGState
 {
 	None,
@@ -14,12 +15,14 @@ enum EGState
 	Win
 };
 
+class UGameTitleBar;
 class UBuildingWidget;
 class UEndGameWidget;
 class ASpawnableBuilding;
 class UGameModeStateMachine;
 class UPlayGameModeState;
 class UEndGameModeState;
+class UPlayerResourcesManager;
 /**
  * 
  */
@@ -36,17 +39,26 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 	void DecrementEnemiesCount() const;
 	EGState GetEndGameResult() const;
-
+	UPlayerResourcesManager* GetResourcesManager() const;
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY(VisibleAnywhere)
+	UPlayerResourcesManager* PlayerResourcesManager;
+	
+	UPROPERTY(VisibleAnywhere)
+	UGameModeStateMachine* StateMachine;
+	
 	UPROPERTY(EditDefaultsOnly, Category ="Widgets")
 	TSubclassOf<UBuildingWidget> BuildingWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category= "Widgets")
 	TSubclassOf<UEndGameWidget> EndGameWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category="Widgets")
+	TSubclassOf<UGameTitleBar> GameTitleBarClass;
 
 	UPROPERTY(EditDefaultsOnly, Category ="Levels")
 	TArray<FLevelData> Levels;
@@ -60,13 +72,18 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Settings")
 	TSubclassOf<class ATargetTower> TargetTowerClass;
 
-
+	UPROPERTY()
 	UBuildingWidget* BuildingWidget;
+	UPROPERTY()
 	UEndGameWidget* EndGameWidget;
+	UPROPERTY()
+	UGameTitleBar* TitleBarWidget;
 
-	UGameModeStateMachine* StateMachine;
+	UPROPERTY()
 	UPlayGameModeState* PlayGameState;
+	UPROPERTY()
 	UEndGameModeState* EndGameState;
+
 
 	EGState EndGameResult;
 
@@ -76,8 +93,8 @@ private:
 	T* CreateGMWidget(TSubclassOf<T> Class, FName Name);
 	
 
-	bool IsGameLost() const;
-	bool IsGameWon() const;
+	bool IsGameLost(); 
+	bool IsGameWon() ;
 
 	void SetupStateMachine();
 };

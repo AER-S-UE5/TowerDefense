@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "../Utility/PlayerData.h"
 #include "Enemy.generated.h"
 
 class APath;
@@ -29,11 +30,11 @@ protected:
 	float GetPrecision() const;
 	APath* GetPath() const;
 	class ATowerDefenseGameModeBase* GetGameMode();
+	void ClaimWorth() const;
 
 private:
 	void GetNextDestination();
-
-private:
+	
 	UPROPERTY(VisibleAnywhere);
 	APath* Path;
 
@@ -42,6 +43,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UHealthComponent* HealthComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category="Settings")
+	TMap<TEnumAsByte<PlayerResource>,int32> Worth;
 	
 	ATowerDefenseGameModeBase* GameMode;
 	

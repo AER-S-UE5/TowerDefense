@@ -6,6 +6,7 @@
 #include "../HealthComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "../TowerDefenseGameModeBase.h"
+#include "TowerDefense/Components/PlayerResourcesManager.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -44,7 +45,21 @@ APath* AEnemy::GetPath() const
 	return Path;
 }
 
-class ATowerDefenseGameModeBase* AEnemy::GetGameMode()
+void AEnemy::ClaimWorth() const
+{
+	if(!Worth.IsEmpty() && GameMode->GetResourcesManager())
+	{
+		TArray<TEnumAsByte<PlayerResource>> Resources;
+		Worth.GetKeys(Resources);
+		for (auto Resource : Resources)
+		{
+			GameMode->GetResourcesManager()->AddPlayerResource(Resource,Worth[Resource]);
+		}		
+	}
+	GameMode->GetResourcesManager()->ResourcesUpdated.Broadcast();
+}
+
+ATowerDefenseGameModeBase* AEnemy::GetGameMode()
 {
 	return GameMode;
 }

@@ -31,8 +31,8 @@ void UEndGameModeState::OnEnter()
 	EndGameWidget->AddToViewport();
 }
 
-void UEndGameModeState::Tick(float DeltaTime)
+void UEndGameModeState::UpdateTick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::UpdateTick(DeltaTime);
 	
 }

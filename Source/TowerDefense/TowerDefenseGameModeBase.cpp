@@ -4,6 +4,7 @@
 #include "TowerDefenseGameModeBase.h"
 #include "Widgets/BuildingWidget.h"
 #include "Building/SpawnableBuilding.h"
+#include "Components/PlayerResourcesManager.h"
 #include "GameMode/EndGameModeState.h"
 #include "GameMode/GameModeStateMachine.h"
 #include "GameMode/PlayGameModeState.h"
@@ -11,12 +12,16 @@
 #include "Kismet/GameplayStatics.h"
 #include "Pawns/PlayerPawn.h"
 #include "Widgets/EndGameWidget.h"
+#include "Widgets/GameTitleBar.h"
 
 
 ATowerDefenseGameModeBase::ATowerDefenseGameModeBase()
 {
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	PrimaryActorTick.bCanEverTick = true;
+	PlayerResourcesManager = CreateDefaultSubobject<UPlayerResourcesManager>("Player Resources Manager");
+	StateMachine = CreateDefaultSubobject<UGameModeStateMachine>("Game Mode State Machine");
+	
 }
 
 void ATowerDefenseGameModeBase::HideWidget(UUserWidget* WidgetToHide)
@@ -47,7 +52,7 @@ void ATowerDefenseGameModeBase::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	if(EndGameResult == None && IsGameLost()) EndGameResult = Lose;
 	if(EndGameResult == None && IsGameWon()) EndGameResult = Win;
-	StateMachine->Tick(DeltaSeconds);
+	if(StateMachine)StateMachine->UpdateTick(DeltaSeconds);
 }
 
 void ATowerDefenseGameModeBase::DecrementEnemiesCount() const
@@ -63,6 +68,12 @@ EGState ATowerDefenseGameModeBase::GetEndGameResult() const
 	return EndGameResult;
 }
 
+UPlayerResourcesManager* ATowerDefenseGameModeBase::GetResourcesManager() const
+{
+	return PlayerResourcesManager;
+}
+
+
 void ATowerDefenseGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -70,30 +81,33 @@ void ATowerDefenseGameModeBase::BeginPlay()
 	Player = Cast<APlayerPawn>(UGameplayStatics::GetPlayerPawn(this, 0));
 	BuildingWidget = CreateGMWidget<UBuildingWidget>(BuildingWidgetClass,"BuildingWidget");
 	EndGameWidget = CreateGMWidget<UEndGameWidget>(EndGameWidgetClass, "EndGameWidget");
+	TitleBarWidget = CreateGMWidget<UGameTitleBar>(GameTitleBarClass, "TitleBarWidget");
+	TitleBarWidget->SetGameMode(this);
+	TitleBarWidget->Populate({GoldCoins});
+	TitleBarWidget->AddToViewport();
 	SetupStateMachine();
 }
 
 
 void ATowerDefenseGameModeBase::SetupStateMachine()
 {
-	StateMachine = NewObject<UGameModeStateMachine>();
-	PlayGameState = NewObject<UPlayGameModeState>();
+	PlayGameState = NewObject<UPlayGameModeState>(this);
 	PlayGameState->Initialize(this,SpawnerTowerClass, TargetTowerClass, Levels[CurrentLevelIndex]);
-	EndGameState = NewObject<UEndGameModeState>();
+	EndGameState = NewObject<UEndGameModeState>(this);
 	EndGameState->Initialize(this,EndGameWidget);
-	StateMachine->AddTransition(PlayGameState,
-								EndGameState,
-								[this](){return ((this->StateMachine->GetCurrentState()== PlayGameState )&&((this->IsGameLost()||this->IsGameWon())));});
+	StateMachine->AddTransition(PlayGameState,EndGameState, &ATowerDefenseGameModeBase::IsGameWon, this);
+	StateMachine->AddTransition(PlayGameState,EndGameState, &ATowerDefenseGameModeBase::IsGameLost, this);
+	//StateMachine->AddTransition(PlayGameState,EndGameState, &ATowerDefenseGameModeBase::IsGameWon,this);
 	StateMachine->SetState(PlayGameState);
 	
 }
 
-bool ATowerDefenseGameModeBase::IsGameWon() const
+bool ATowerDefenseGameModeBase::IsGameWon() 
 {
 	return (Cast<UPlayGameModeState>(StateMachine->GetCurrentState())->IsGameWon());
 }
 
-bool ATowerDefenseGameModeBase::IsGameLost() const
+bool ATowerDefenseGameModeBase::IsGameLost() 
 {
 	return (Cast<UPlayGameModeState>(StateMachine->GetCurrentState())->IsGameLost());
 }

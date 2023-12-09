@@ -42,8 +42,13 @@ private:
 	ATowerDefenseGameModeBase* GameMode;
 
 	UEndGameWidget* EndGameWidget;
-	
+
+	UFUNCTION()
 	void PlayNextLevel();
+
+	UFUNCTION()
 	void ReplayLevel();
+
+	UFUNCTION()
 	void QuitGame();
 };

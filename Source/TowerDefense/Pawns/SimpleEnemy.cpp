@@ -75,5 +75,6 @@ void ASimpleEnemy::MoveTowards(FVector Destination)
 void ASimpleEnemy::Die()
 {
 	GetGameMode()->DecrementEnemiesCount();
+	ClaimWorth();
 	Destroy();
 }

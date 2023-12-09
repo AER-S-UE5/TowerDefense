@@ -19,7 +19,7 @@ class TOWERDEFENSE_API UEndGameModeState : public UGameModeState
 public:
 	void Initialize(ATowerDefenseGameModeBase* GM, UEndGameWidget* EGW);
 	virtual void OnEnter() override;
-	virtual void Tick(float DeltaTime) override;
+	virtual void UpdateTick(float DeltaTime) override;
 private:
 	ATowerDefenseGameModeBase* GameMode;
 	UEndGameWidget* EndGameWidget;
