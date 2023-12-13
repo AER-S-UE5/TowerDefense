@@ -1,7 +1,0 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "GameModeStateMachine.h"
-#include "../TowerDefenseGameModeBase.h"
-#include "GameModeState.h"
-

@@ -5,8 +5,8 @@
 #include "Widgets/BuildingWidget.h"
 #include "Building/SpawnableBuilding.h"
 #include "Components/PlayerResourcesManager.h"
+#include "Components/StateMachineComponent.h"
 #include "GameMode/EndGameModeState.h"
-#include "GameMode/GameModeStateMachine.h"
 #include "GameMode/PlayGameModeState.h"
 #include "Terrain/BuildingTerrainTile.h"
 #include "Kismet/GameplayStatics.h"
@@ -20,7 +20,7 @@ ATowerDefenseGameModeBase::ATowerDefenseGameModeBase()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	PrimaryActorTick.bCanEverTick = true;
 	PlayerResourcesManager = CreateDefaultSubobject<UPlayerResourcesManager>("Player Resources Manager");
-	StateMachine = CreateDefaultSubobject<UGameModeStateMachine>("Game Mode State Machine");
+	StateMachine = CreateDefaultSubobject<UStateMachineComponent>("Game Mode State Machine");
 	
 }
 
@@ -52,7 +52,6 @@ void ATowerDefenseGameModeBase::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	if(EndGameResult == None && IsGameLost()) EndGameResult = Lose;
 	if(EndGameResult == None && IsGameWon()) EndGameResult = Win;
-	if(StateMachine)StateMachine->UpdateTick(DeltaSeconds);
 }
 
 void ATowerDefenseGameModeBase::DecrementEnemiesCount() const
@@ -95,19 +94,17 @@ void ATowerDefenseGameModeBase::SetupStateMachine()
 	PlayGameState->Initialize(this,SpawnerTowerClass, TargetTowerClass, Levels[CurrentLevelIndex]);
 	EndGameState = NewObject<UEndGameModeState>(this);
 	EndGameState->Initialize(this,EndGameWidget);
-	StateMachine->AddTransition(PlayGameState,EndGameState, &ATowerDefenseGameModeBase::IsGameWon, this);
-	StateMachine->AddTransition(PlayGameState,EndGameState, &ATowerDefenseGameModeBase::IsGameLost, this);
-	//StateMachine->AddTransition(PlayGameState,EndGameState, &ATowerDefenseGameModeBase::IsGameWon,this);
-	StateMachine->SetState(PlayGameState);
+	StateMachine->AddTransition(PlayGameState,EndGameState, [&](){return (IsGameWon()||IsGameLost());});
+	StateMachine->SetCurrentState(PlayGameState);
 	
 }
 
-bool ATowerDefenseGameModeBase::IsGameWon() 
+bool ATowerDefenseGameModeBase::IsGameWon() const
 {
 	return (Cast<UPlayGameModeState>(StateMachine->GetCurrentState())->IsGameWon());
 }
 
-bool ATowerDefenseGameModeBase::IsGameLost() 
+bool ATowerDefenseGameModeBase::IsGameLost() const
 {
 	return (Cast<UPlayGameModeState>(StateMachine->GetCurrentState())->IsGameLost());
 }

@@ -8,6 +8,8 @@
 #include "TowerDefenseGameModeBase.generated.h"
 
 
+class UStateMachineComponent;
+
 enum EGState
 {
 	None,
@@ -49,7 +51,7 @@ private:
 	UPlayerResourcesManager* PlayerResourcesManager;
 	
 	UPROPERTY(VisibleAnywhere)
-	UGameModeStateMachine* StateMachine;
+	UStateMachineComponent* StateMachine;
 	
 	UPROPERTY(EditDefaultsOnly, Category ="Widgets")
 	TSubclassOf<UBuildingWidget> BuildingWidgetClass;
@@ -93,8 +95,8 @@ private:
 	T* CreateGMWidget(TSubclassOf<T> Class, FName Name);
 	
 
-	bool IsGameLost(); 
-	bool IsGameWon() ;
+	bool IsGameLost() const; 
+	bool IsGameWon() const;
 
 	void SetupStateMachine();
 };
