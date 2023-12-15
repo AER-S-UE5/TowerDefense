@@ -48,5 +48,6 @@ private:
 	TMap<TEnumAsByte<PlayerResource>,int32> Worth;
 	
 	ATowerDefenseGameModeBase* GameMode;
+		
 	
 };

@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "BuildButton.generated.h"
 
+class ATowerDefenseGameModeBase;
 class ASpawnableBuilding;
 
 /**
@@ -24,6 +25,13 @@ public:
 	void SetBuildingClass(TSubclassOf<ASpawnableBuilding> value);
 
 	void SetBuildingWidget(class UBuildingWidget* Widget);
+
+	void SetGameMode(ATowerDefenseGameModeBase* Value);
+
+	bool CheckCostAvailability() const;
+
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
 protected:
 	virtual void NativeOnInitialized() override;
 
@@ -39,9 +47,13 @@ private:
 
 	TSubclassOf<ASpawnableBuilding> BuildingClass;
 
+	UPROPERTY()
 	class UBuildingWidget* BuildingWidget;
+
+	ATowerDefenseGameModeBase* GameMode;
 
 	UFUNCTION()
 	void Build();
+
 	
 };

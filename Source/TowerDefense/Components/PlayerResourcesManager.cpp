@@ -51,9 +51,18 @@ void UPlayerResourcesManager::ReducePlayerResource(PlayerResource Resource, int3
 		const int32 NewQuantity = FMath::Max(PlayerData.Resources[Resource]-Quantity,0);
 		PlayerData.Resources.Add(Resource, NewQuantity);
 	}
+	ResourcesUpdated.Broadcast();
 }
 
-int32 UPlayerResourcesManager::GetResourcePossession(PlayerResource Resource) const
+void UPlayerResourcesManager::ReducePlayerResource(TMap<TEnumAsByte<PlayerResource>, int32> DeductedResources)
+{
+	for (auto Resource : DeductedResources)
+	{
+		ReducePlayerResource(Resource.Key,Resource.Value);
+	}
+}
+
+int32 UPlayerResourcesManager::GetResourcePossession(TEnumAsByte<PlayerResource> Resource) const
 {
 	if(!PlayerData.Resources.IsEmpty() && PlayerData.Resources.Contains(Resource)) return PlayerData.Resources[Resource];
 	return  0;

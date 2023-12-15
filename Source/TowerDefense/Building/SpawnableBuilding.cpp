@@ -19,6 +19,11 @@ FString ASpawnableBuilding::GetBuildingClassName() const
 	return BuildingClassName;
 }
 
+TMap<TEnumAsByte<PlayerResource>, int32> ASpawnableBuilding::GetCost() const
+{
+	return Cost;
+}
+
 void ASpawnableBuilding::SetClassName(FString value)
 {
 	BuildingClassName = value;

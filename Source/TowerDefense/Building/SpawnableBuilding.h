@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BuildingBase.h"
+#include "TowerDefense/Utility/PlayerData.h"
 #include "SpawnableBuilding.generated.h"
 
 class UHealthComponent;
@@ -25,6 +26,8 @@ public:
 
 	FString GetBuildingClassName() const;
 
+	TMap<TEnumAsByte<PlayerResource>, int32> GetCost() const;
+
 protected:
 	void SetClassName(FString value);
 
@@ -33,4 +36,7 @@ private:
 	UHealthComponent* HealthComponent;
 
 	FString BuildingClassName;
+
+	UPROPERTY(EditDefaultsOnly, Category="Settings")
+	TMap<TEnumAsByte<PlayerResource>, int32> Cost;
 };

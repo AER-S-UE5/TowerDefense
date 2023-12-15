@@ -44,6 +44,7 @@ void ATowerDefenseGameModeBase::Build(TSubclassOf<ASpawnableBuilding> BuildingCl
 	const USceneComponent* SpawnPoint = BuildingWidget->GetTileToBuildOn()->GetBuildingPoint();
 	GetWorld()->SpawnActor<ASpawnableBuilding>(BuildingClass, SpawnPoint->GetComponentLocation(),SpawnPoint->GetComponentRotation());
 	HideWidget(BuildingWidget);
+	PlayerResourcesManager->ReducePlayerResource(BuildingClass.GetDefaultObject()->GetCost());
 	Player->SetPlayerState(APlayerPawn::PlayerState::Default);
 }
 
@@ -79,6 +80,7 @@ void ATowerDefenseGameModeBase::BeginPlay()
 	EndGameResult = None;
 	Player = Cast<APlayerPawn>(UGameplayStatics::GetPlayerPawn(this, 0));
 	BuildingWidget = CreateGMWidget<UBuildingWidget>(BuildingWidgetClass,"BuildingWidget");
+	BuildingWidget->Populate(this);
 	EndGameWidget = CreateGMWidget<UEndGameWidget>(EndGameWidgetClass, "EndGameWidget");
 	TitleBarWidget = CreateGMWidget<UGameTitleBar>(GameTitleBarClass, "TitleBarWidget");
 	TitleBarWidget->SetGameMode(this);

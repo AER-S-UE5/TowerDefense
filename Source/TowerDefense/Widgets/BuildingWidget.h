@@ -17,12 +17,13 @@ class TOWERDEFENSE_API UBuildingWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	void Populate();
+	void Populate(ATowerDefenseGameModeBase* GameMode);
 	void SetTileToBuildOn(class ABuildingTerrainTile* value);
 	ABuildingTerrainTile* GetTileToBuildOn() const;
 	void Build(TSubclassOf<ASpawnableBuilding> BuildingClass);
 	void SetGameMode(ATowerDefenseGameModeBase* value);
 
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 protected:
 	virtual void NativeOnInitialized() override;
@@ -41,4 +42,6 @@ private:
 	ABuildingTerrainTile* TileToBuildOn;
 
 	ATowerDefenseGameModeBase* TDGameMode;
+
+	
 };

@@ -20,7 +20,8 @@ public:
 
 	void AddPlayerResource(PlayerResource Resource, int32 Quantity);
 	void ReducePlayerResource(PlayerResource Resource, int32 Quantity);
-	int32 GetResourcePossession(PlayerResource Resource) const;
+	void ReducePlayerResource(TMap<TEnumAsByte<PlayerResource>, int32> DeductedResources);
+	int32 GetResourcePossession(TEnumAsByte<PlayerResource> Resource) const;
 	UTexture2D* GetResourceIcon(PlayerResource Resource) const;
 
 	FSimpleEvent ResourcesUpdated;
